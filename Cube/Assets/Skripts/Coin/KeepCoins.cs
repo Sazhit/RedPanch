@@ -3,7 +3,7 @@ using TMPro;
 
 public class KeepCoins : MonoBehaviour
 {
-    [SerializeField] private ShopsItem _shopsItem;
+    [SerializeField] private Player _player;
 
     [SerializeField] private int _coins;
     [SerializeField] private TextMeshProUGUI _coinText;
@@ -33,6 +33,6 @@ public class KeepCoins : MonoBehaviour
     {
         _coins += cost;
         _coinText.text = "" + _coins.ToString();
-        _shopsItem.SavePlayer();
+        _player.SavePlayer();
     }
 }

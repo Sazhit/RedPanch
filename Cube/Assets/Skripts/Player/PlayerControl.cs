@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
-    [SerializeField] private ShopsItem _shopsItem;
+    [SerializeField] private Player player;
 
     [SerializeField] private float _distanceLazer;
     [SerializeField] protected float _gravityForce;
@@ -19,12 +19,17 @@ public class PlayerControl : MonoBehaviour
 
     //private void Awake()
     //{
-    //    _shopsItem.LoadPlayer();
+    //    player.LoadPlayer();
     //}
 
     private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+    }
+
+    private void Update()
+    {
+        OnGround();
     }
 
     public void OnButtonDown()
@@ -44,14 +49,6 @@ public class PlayerControl : MonoBehaviour
         if (hit.transform != null && hit.transform.CompareTag("Ground"))
         {
             _rigidbody2D.gravityScale = -_gravityForce;
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            OnGround();
         }
     }
 }

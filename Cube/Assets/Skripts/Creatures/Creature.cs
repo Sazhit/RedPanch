@@ -5,7 +5,7 @@ using UnityEngine.Pool;
 
 public class Creature : MonoBehaviour
 {
-    [SerializeField] private int _damage;
+    [SerializeField] protected int _damage;
     [SerializeField] private int _positionIndex;
     [SerializeField] private float _speed;
 
@@ -36,8 +36,8 @@ public class Creature : MonoBehaviour
               actionOnRelease: (obj) => obj.gameObject.SetActive(false),
               actionOnDestroy: (obj) => Destroy(obj.gameObject),
               collectionCheck: true,
-              defaultCapacity: 20,
-              maxSize: 20);
+              defaultCapacity: 30,
+              maxSize: 30);
     }
 
     public virtual Creature Spawn(Vector3 pos, Quaternion rot, float speed)
@@ -55,11 +55,13 @@ public class Creature : MonoBehaviour
         {
             health.ApplyDamage(_damage);
         }
+
         Die();
     }
 
     public void Die()
     {
         _pool.Release(this);
+        Debug.Log("123");
     }
 }

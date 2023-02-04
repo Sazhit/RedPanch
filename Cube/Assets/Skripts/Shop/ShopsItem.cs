@@ -3,38 +3,11 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-[System.Serializable]
-public class Upgrade 
-{
-    public string Name;
-    public int Cost;
-    public Sprite Sprite;
-    public int Quantity;
-    public int MaxQuantity;
-
-    [HideInInspector] public GameObject itemRef;
-
-    public void Save()
-    {
-        SaveUpgrade.SavePlayer(this);
-    }
-
-    public void Load()
-    {
-        DataUpbgrade data =  SaveUpgrade.LoadPlayer();
-
-        Quantity = data.Quantity;
-    }
-}
-
 public class ShopsItem : MonoBehaviour
 {
-    public PlayerControl PlayerControl;
-    public Health Health;
-    public KeepCoins KeepCoins;
-    public Ultimate Ultimate;
+    [SerializeField] private Player _player;
 
-    [SerializeField] public Upgrade[] _upgrades;
+    [SerializeField] private Upgrade[] _upgrades;
 
     [SerializeField] private GameObject _shopUI;
     [SerializeField] private TextMeshProUGUI _shopCoinText;
@@ -46,26 +19,18 @@ public class ShopsItem : MonoBehaviour
     private const string ImprovementMaxHealth = "MaxHealth";
     private const string ImprovementCooldawn = "Cooldown";
 
-    public bool currentOpen;
-
-    private void Awake()
-    {
-        //LoadPlayer();
-    }
-
     private void Start()
     {
+        //_player.LoadPlayer();
         foreach (Upgrade upgrade in _upgrades)
         {
             GameObject item = Instantiate(_itemPrefab, _shopContent);
-
-            upgrade.itemRef = item;
 
             foreach (Transform child in item.transform)
             {
                 if (child.gameObject.name == "Quantity")
                 {
-                    child.gameObject.GetComponent<TextMeshProUGUI>().text = upgrade.Quantity.ToString();
+                    child.gameObject.GetComponent<TextMeshProUGUI>().text = _player.GetUpgrade(upgrade.Name).ToString();
                 }
                 else if (child.gameObject.name == "Cost")
                 {
@@ -81,45 +46,21 @@ public class ShopsItem : MonoBehaviour
                 }
             }
 
-            item.GetComponent<Button>().onClick.AddListener(() => BuyUpgrade(upgrade));
+            item.GetComponent<Button>().onClick.AddListener(() => BuyUpgrade(upgrade, item.transform));
         }
     }
 
-
-    public void BuyUpgrade(Upgrade upgrade)
+    private void BuyUpgrade(Upgrade upgrade, Transform item)
     {
-        if (KeepCoins.Coins >= upgrade.Cost && upgrade.Quantity <= upgrade.MaxQuantity)
+        if (_player.KeepCoins.Coins >= upgrade.Cost && _player.GetUpgrade(upgrade.Name) < upgrade.MaxQuantity)
         {
-            KeepCoins.SetCoins(-upgrade.Cost);
-            upgrade.Quantity++;
-            upgrade.itemRef.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = upgrade.Quantity.ToString();
+            _player.KeepCoins.SetCoins(-upgrade.Cost);
+            _player.AddUpgrade(upgrade.Name, 1);
+            
+           item.GetChild(0).GetComponent<TextMeshProUGUI>().text = _player.GetUpgrade(upgrade.Name).ToString();
 
             ApplyUpgrade(upgrade);
         }
-    }
-
-    public void LoadUpgrade()
-    {
-        foreach (var item in _upgrades)
-        {
-            item.Load();
-        }
-    }
-
-    public void SavePlayer()
-    {
-        SaveSystem.SavePlayer(this);
-    }
-
-    public void LoadPlayer()
-    {
-        PlayerData data = SaveSystem.LoadPlayer();
-
-        PlayerControl.GravityForce = data.GravityForce;
-        Ultimate.SkillsCooldown = data.Cooldown;
-        Health.MaxHealth = data.MaxHealth;
-        KeepCoins.Coins = data.Coins;
-
     }
 
     private void ApplyUpgrade(Upgrade upgrade)
@@ -127,40 +68,26 @@ public class ShopsItem : MonoBehaviour
         switch (upgrade.Name)
         {
             case ImprovementGravityForce:
-                PlayerControl.GravityForce += 1;
+                _player.PlayerControl.GravityForce += 1;
                 break;
             case ImprovementMaxHealth:
-                Health.MaxHealth += 5;
+                _player.Health.MaxHealth += 5;
                 break;
             case ImprovementCooldawn:
-                Ultimate.SkillsCooldown -= 1;
+                _player.Ultimate.SkillsCooldown -= 1;
                 break;
-        }
-    }
-
-    public void OnButtonShop()
-    {
-        if (currentOpen)
-        {
-            _shopUI.SetActive(true);
-            currentOpen = false;
-        }
-        else if (currentOpen == false)
-        {
-            _shopUI.SetActive(false);
-            currentOpen = true;
         }
     }
 
     public void ToNextScene(int scene)
     {
-        //SceneManager.LoadScene(scene);
-        SavePlayer();
+        SceneManager.LoadScene(scene);
+        _player.SavePlayer();
     }
 
     private void OnGUI()
     {
-        _shopCoinText.text = KeepCoins.Coins.ToString();
+        _shopCoinText.text = _player.KeepCoins.Coins.ToString();
     }
 }
 
