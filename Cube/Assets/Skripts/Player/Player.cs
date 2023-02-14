@@ -1,10 +1,9 @@
-
 using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
-#if UNITY_EDITOR
 using UnityEditor;
+
+#if UNITY_EDITOR
 #endif
 
 public class Player : MonoBehaviour
@@ -14,7 +13,7 @@ public class Player : MonoBehaviour
     public KeepCoins KeepCoins;
     public Ultimate Ultimate;
 
-    [SerializeField] private CustomDictionary upgrade = new CustomDictionary();
+    [SerializeField] private Dictionary<string, int> upgrade = new Dictionary<string, int>();
 
     public List<KeyValueElement> GetQuantity()
     {
@@ -64,7 +63,7 @@ public class Player : MonoBehaviour
         Ultimate.SkillsCooldown = data.Cooldown;
         Health.MaxHealth = data.MaxHealth;
         KeepCoins.Coins = data.Coins;
-        upgrade = new CustomDictionary();
+        upgrade = new Dictionary<string, int>();
 
         foreach (var item in data.Quantity)
         {
@@ -75,10 +74,10 @@ public class Player : MonoBehaviour
 
 }
 
-[System.Serializable] public class CustomDictionary : SerializableDictionary<string, int> { }
+//[System.Serializable] public class CustomDictionary : SerializableDictionary<string, int> { }
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 
-[CustomPropertyDrawer(typeof(CustomDictionary))] // Name of your class (same as above)
-public class CustomDictionaryDrawer : DictionaryDrawer<string, int> { }
-#endif 
+//[CustomPropertyDrawer(typeof(CustomDictionary))] // Name of your class (same as above)
+//public class CustomDictionaryDrawer : DictionaryDrawer<string, int> { }
+//#endif 

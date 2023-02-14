@@ -3,10 +3,26 @@ using UnityEngine;
 
 public class ScoreController : MonoBehaviour
 {
+    public static ScoreController instance;
+
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private TextMeshProUGUI _highscore;
     [SerializeField] private float _scoreTraveled;
     [SerializeField] private int _score;
+
+    private const string prefScore = "prefScore";
+
+    public TextMeshProUGUI ScoreText
+    {
+        get
+        {
+            return _scoreText;
+        }
+        private set
+        {
+            _scoreText = value;
+        }
+    }
 
     public int Score
     {
@@ -22,7 +38,7 @@ public class ScoreController : MonoBehaviour
             }
         }
     }
-
+    
     public float ScoreTraveled
     {
         get
@@ -38,7 +54,11 @@ public class ScoreController : MonoBehaviour
         }
     }
 
-    public const string prefScore = "prefScore";
+    private void Awake()
+    {
+        instance = this;
+    }
+
 
     private void Start()
     {
@@ -50,7 +70,7 @@ public class ScoreController : MonoBehaviour
         ToScore();
     }
 
-    public void ToScore()
+    private void ToScore()
     {
         _scoreTraveled += Time.deltaTime * 5;
         _scoreText.text = (int)_scoreTraveled + "";

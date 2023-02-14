@@ -48,7 +48,7 @@ public class Spawner : MonoBehaviour
 
             if (_scoreController.ScoreTraveled < _scoreController.Score)
             {
-                int randomSpawn = Random.Range(0, _easy.Length);
+                int randomSpawn = Random.Range(0, _easy.Length) ;
                 enemy = _easy[randomSpawn];
             }
             else if (_scoreController.ScoreTraveled > _scoreController.Score)

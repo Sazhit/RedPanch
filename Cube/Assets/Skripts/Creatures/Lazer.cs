@@ -27,7 +27,7 @@ public class Lazer : Creature
 
         Debug.DrawRay(transform.position, direction, Color.red);
 
-        if (hit.transform != null && hit.transform.TryGetComponent(out Health health)) 
+        if (hit.transform != null && hit.transform.TryGetComponent(out Health health))
         {
             health.ApplyDamage(_damage);
             Debug.Log(_damage);

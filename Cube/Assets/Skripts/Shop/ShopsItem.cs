@@ -21,7 +21,7 @@ public class ShopsItem : MonoBehaviour
 
     private void Start()
     {
-        //_player.LoadPlayer();
+        _player.LoadPlayer();
         foreach (Upgrade upgrade in _upgrades)
         {
             GameObject item = Instantiate(_itemPrefab, _shopContent);

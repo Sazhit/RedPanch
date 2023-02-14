@@ -7,7 +7,7 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private Player player;
 
     [SerializeField] private float _distanceLazer;
-    [SerializeField] protected float _gravityForce;
+    [SerializeField] private float _gravityForce;
 
     [SerializeField] private Ultimate ultimate;
 
@@ -15,12 +15,12 @@ public class PlayerControl : MonoBehaviour
     public float GravityForce { get => _gravityForce; set => _gravityForce = value; }
 
     public bool CheckUltimate { get; set; }
-    
 
-    //private void Awake()
-    //{
-    //    player.LoadPlayer();
-    //}
+
+    private void Awake()
+    {
+        player.LoadPlayer();
+    }
 
     private void Start()
     {

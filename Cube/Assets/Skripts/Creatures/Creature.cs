@@ -11,6 +11,7 @@ public class Creature : MonoBehaviour
 
     private Spawner _spawner;
     private ObjectPool<Creature> _pool;
+
     public int PositionIndex
     {
         get
@@ -36,8 +37,8 @@ public class Creature : MonoBehaviour
               actionOnRelease: (obj) => obj.gameObject.SetActive(false),
               actionOnDestroy: (obj) => Destroy(obj.gameObject),
               collectionCheck: true,
-              defaultCapacity: 30,
-              maxSize: 30);
+              defaultCapacity: 15,
+              maxSize: 15);
     }
 
     public virtual Creature Spawn(Vector3 pos, Quaternion rot, float speed)
@@ -62,6 +63,5 @@ public class Creature : MonoBehaviour
     public void Die()
     {
         _pool.Release(this);
-        Debug.Log("123");
     }
 }
